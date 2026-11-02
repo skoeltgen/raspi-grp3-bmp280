@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+bmp280 = "0.4.0"
+chrono = "0.4.45"
+diesel = "2.3.14"
