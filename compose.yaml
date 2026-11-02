@@ -1,0 +1,31 @@
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+# Use root/example as user/password credentials
+  mariadb:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+
+  poller:
+    image: data_poller:latest
+    restart: unless-stopped
+    devices:
+      - /dev/i2c-1
+
+volumes:
+  grafana-storage: {}
