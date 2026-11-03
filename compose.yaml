@@ -5,15 +5,28 @@ services:
     restart: unless-stopped
     ports:
       - '3000:3000'
+    user: "0"
     volumes:
-      - grafana-storage:/var/lib/grafana
-
+      - .grafana-storage:/var/lib/grafana
+    depends_on:
+      python-poller:
+        condition: service_started
 # Use root/example as user/password credentials
   mariadb:
     image: mariadb
+    container_name: database
     restart: unless-stopped
     environment:
       MARIADB_ROOT_PASSWORD: example
+      MARIADB_DATABASE: python-measurement
+    volumes:
+      - .mariadb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   adminer:
     image: adminer
@@ -21,11 +34,16 @@ services:
     ports:
       - 8080:8080
 
-  poller:
-    image: data_poller:latest
+  python-poller:
+    image: python_poller:latest
+    container_name: poller
     restart: unless-stopped
     devices:
       - /dev/i2c-1
+    depends_on:
+      mariadb:
+        condition: service_healthy
 
 volumes:
-  grafana-storage: {}
+  .grafana-storage: {}
+  .mariadb:
