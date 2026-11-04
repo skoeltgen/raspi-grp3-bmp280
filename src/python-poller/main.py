@@ -24,6 +24,23 @@ except mariadb.Error as e:
 
 # Get Cursor
 cur = conn.cursor()
+
+try:
+	cur.execute("SHOW TABLES")
+	tables =cur.fetchone()
+	if "metric" not in tables:
+		try:
+	        	cur.execute("CREATE TABLE metric(time INT(11),temperature float,pressure float)")
+		except mariadb.Error as e:
+                	print(f"Error creating Table metric in python_mesurement: {e}")
+                	sys.exit(1)
+
+except mariadb.Error as e :
+	print(f"Error creating Table metric in python_mesurement: {e}")
+	sys.exit(1)
+
+
+
 while True:
 	try:
 		cur.execute(
