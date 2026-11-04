@@ -108,10 +108,11 @@ Weitere Informationen sind unter [https://pinout.xyz/](https://pinout.xyz/) zu f
 ###### Basics
 
 1. `sudo raspi-config`
-   1. `i2c enable`
-   2. `full filesystem usable`
+   1. `i2c enable: 3 Interface Options -> I5 I2C -> Yes`
+   2. `full filesystem usable: 6 Advanced Options -> A1 Expand Filesystem`
 2. `sudo apt update && sudo apt upgrade`
 3. `sudo autoremove`
+4. `rpi-connect on`
 4. `rpi-connect signin` -> Fernzugriff
 5. `sudo apt install git`
 
@@ -121,8 +122,18 @@ Weitere Informationen sind unter [https://pinout.xyz/](https://pinout.xyz/) zu f
 2. `sudo install -m 0755 -d /etc/apt/keyrings`
 3. `sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc`
 4. `sudo chmod a+r /etc/apt/keyrings/docker.asc`
-5. `sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`
-6. `sudo usermod -aG docker admin` -> Docker ohne `sudo`
+5. `sudo tee /etc/apt/sources.list.d/docker.sources`
+   > EOFT
+   > ypes: deb
+   > URIs: https://download.docker.com/linux/debian
+   > Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+   > Components: stable
+   > Architectures: $(dpkg --print-architecture)
+   > Signed-By: /etc/apt/keyrings/docker.asc
+   > EOF
+6. `sudo apt update`
+7. `sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`
+8. `sudo usermod -aG docker admin` -> Docker ohne `sudo`
 
 Oder einfach der **[offiziellen Anleitung](https://docs.docker.com/engine/install/debian "https://docs.docker.com/engine/install/debian")** folgen.
 
@@ -156,19 +167,6 @@ Weitere Informationen sind unter [Grafana APT-Installation](https://grafana.com/
 
 #### Grundeinrichtung PI
 
-##### Repo zu APT-Sources hinzufügen
-
-1. `sudo tee /etc/apt/sources.list.d/docker.sources`
-   > EOFT
-   > ypes: deb
-   > URIs: https://download.docker.com/linux/debian
-   > Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
-   > Components: stable
-   > Architectures: $(dpkg --print-architecture)
-   > Signed-By: /etc/apt/keyrings/docker.asc
-   > EOF
-2. `sudo apt update`
-
 ##### Hinzufügen von Wlan Netzwerken
 
 1. `sudo nmtui`
@@ -176,6 +174,23 @@ Weitere Informationen sind unter [Grafana APT-Installation](https://grafana.com/
 ---
 
 ## Sonstiges
+Abgesehen von der in der Abgabe wurde sich mit weiteren Möglichkeiten von Datenbanken, grafischen Darstellungen, Automatisierungstools und Scripting Sprachen außeinandergesetzt.
+Bei den Sprachen python und Rust wurde sich des weiteren mit möglichen Dependencies zur Nutzung in dem Projekt auseinandergesetzt.
+
+### Automatisierungstools
+- n8n: zu mächtig für das Projekt, wenn bereits vorhanden kann es jedoch verwendet werden
+- nodeRED: vergleichbar mit n8n
+- cron: da der gesamte Softwarestack auf Docker aufbaut verworfen; 
+- docker image mit Dauerschleife im Programm/Skript: als Auswahl getroffen, da der übrige Softwarestack ebenfalls als Docker Container umgesetzt sind
+
+### Datenbank 
+- influxDB (TSDB): trotz spezialisierung auf eine hohes read/write aufkommen bei geringer Datengröße für den Raspi leider nicht geeignet, da die pagesize im Docker Image nicht mit dem Raspberry Pi übereinstimmt
+- sqlite: durch Grafana nicht unterstützt
+- mariaDB: durch grafana unterstützt
+
+### Darstellung
+jypiter node
+
 
 ### Ausgabe von Git Log online vor der Bearbeitung der Dokumentation (Arbeitsschritte von neu nach alt)
 
