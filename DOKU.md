@@ -74,7 +74,7 @@ Es gibt eingie Tools und Programme welche für des Projekt geeignet wären. Da d
 Zudem war in unserer Gruppe bereits einiges an Vorwissen über Scripting und Datenbanken vorhanden, so dass wir uns länger mit dem Informieren über die verschiedenen Tools und das Docker Setup beschäftigt haben.
 Zudem geben die gesammelten Daten auch nur eine Gewissen Spielraum (aufgrunde von Menge und Anzahl).
 
-Daher haben wir uns für das *Docker Setup*, mit *Grafana* für die Oberfläche, MariaDB als Datenbank und Python Scripts für das Auslesen.
+Daher haben wir uns für das *Docker Setup*, mit *Grafana* für die Oberfläche, MariaDB als Datenbank und Python Scripts für das Auslesen endschieden.
 
 ---
 
