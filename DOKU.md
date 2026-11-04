@@ -11,20 +11,66 @@ lastEditDate: 2026-11-04
 
 Gruppe 3: Sven Költgen, Moritz Valkysers
 
+---
+
 ## Festlegung Systemumgebung und Projektkontext
 
+### Systemumgebung
+
 - **OS**: PI OS Light 64 bit
-  - Warum:
-    -> leichtgewichtig und ressourcenschohnend
-    -> keine Graphische Oberfläche nötig, das Arbeit via ssh - passt zu der gegebenen Hardware (Raspberry PI)
+	- Warum:
+	    -> leichtgewichtig und ressourcenschonend
+	    -> keine Graphische Oberfläche nötig, das Arbeit via ssh -> passt zu der gegebenen Hardware (Raspberry PI)
 - **Systemsprache**: Deutsch
-  - für Tastatus-Layout und Zeit
+	- für Tastatus-Layout und Zeit
 - **Accountdaten**
-  - user:admin
-  - pwd:admin
+	 - user:admin
+	- pwd:admin
 - **Zugriffsmöglichkeiten**
-  - ssh, wenn in gleichem Netzwerk
-  - Pi Connect (da das Netzwerk IT-Lab_Schueler P2P nicht zulässt)
+	- ssh, wenn in gleichem Netzwerk
+	- Pi Connect (da das Netzwerk IT-Lab_Schueler P2P nicht zulässt)
+
+### Projektkontext
+
+Abgesehen von der in der Abgabe befindlichen Datenbanken, grafischen Darstellungen, Automatisierungstools und Scripting Sprachen, wurde sich mit **weiteren Möglichkeiten** außeinandergesetzt.
+Bei den Sprachen *Python* und *Rust* wurde sich des weiteren mit möglichen *Dependencies* zur Nutzung in dem Projekt auseinandergesetzt.
+
+#### Automatisierungstools
+
+- **n8n**:
+	- Zu mächtig für das Projekt, wenn bereits vorhanden kann es jedoch verwendet werden. Ehr für *Komplexe Automatisierungen* und eingebaute Unterstützung von KI-Agenten, welche hier unangebracht ist.
+- **nodeRED**:
+	- Teilweise vergleichbar mit *n8n, aber ohne die KI Einbindung und ehr für die visuelle Programmierung von Code.
+- **cron**:
+	- Da der gesamte Softwarestack auf *Docker* aufbaut ist wurde diese Idee wieder verworfen. 
+- **Docker Image** mit *Dauerschleife im Programm/Skript*:
+	- Als **Finale Auswahl getroffen**, da der übrige Softwarestack ebenfalls als *Docker Container* umgesetzt sind. Zudem sind bereits erste Kenntnisse mit Docker vorhanden.
+
+#### Datenbank
+
+- **influxDB** (TSDB):
+	- Trotz einer spezialisierung auf eine *hohes read/write*, ist aufkommen bei geringer Datengröße für den Raspi **leider nicht geeignet**, da die *pagesize* im *Docker Image* nicht mit dem *Raspberry Pi* übereinstimmt.
+- **SQLite**: Wird durch *grafana* nicht unterstützt.
+- **MariaDB**: Wird durch *grafana* unterstützt.
+
+#### Darstellung
+
+- **Jupyter Notebook**: 
+	- Wird eher für aktives arbeiten mit Daten, bei z.B. Analysen benutzt und nicht für ein Dashboard.
+- **grafana**:
+	- Ist ein mächtig Tool und kann erstmal überfordernt wirken. Jedoch ist es perfekt für das Monitoring for Time-Series-Daten geeignet und weit verbreitet.
+- **plotly**:
+	- Ist eine *Python Biobliothek*, die weitere Tools und Packages benötigt um eine Visualisierung zu realisieren. Jedoch sehr flexiebel Nutzbar, da alles per Code definiert werden kann.
+
+#### Skriptsprache
+
+- **Python**: Wird durch *Aufgabenstellung* gefordert.
+- **Rust**: aktuellere dependencies, da nicht überprüfbar abgeleht vielleicht als "Zusatzleistung"?
+
+### Fazit
+
+
+
 
 ---
 
@@ -49,8 +95,6 @@ Gruppe 3: Sven Költgen, Moritz Valkysers
 1. `mariadb`
 2. `bmp280`
    - Keine API von Bosch gefunden (für den Sensore), daher das Pip-Package `bmp280-python` für das auslesen der Daten benutzt.
-
----
 
 ### Installation
 
@@ -116,6 +160,7 @@ Weitere Informationen sind unter [https://pinout.xyz/](https://pinout.xyz/) zu f
 4. `rpi-connect signin` -> Fernzugriff
 5. `sudo apt install git`
 
+
 ###### Offizielle Docker GPG-Key hinzufügen
 
 1. `sudo apt install ca-certificates curl`
@@ -151,53 +196,26 @@ Diese Befehle müssen auf dem PI nacheinander ausgeführt werden:
 
 ---
 
-#### Händische Install
-
 #### Grafana einrichten
 
-Weitere Informationen sind unter [Grafana APT-Installation](https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/#install-from-apt-repository) zu finden.
+Sollte nach Docker start eigentlich im Browser erreichbar sein, sonst unter [Grafana APT-Installation](https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/#install-from-apt-repository)  hilfe suchen.
 
-#### I2C einrichten
+##### Dashboard
 
-1. `sudo raspi-config`
-   -> 3 Interface Options
-2. I5 I2C aktivieren
-3. `sudo reboot`
-4. `sudo apt isntall i2c-tools`
+Für die Erstellung eines Simpelen Dashboards sind folgenede Schritte Nötig:
 
-#### Grundeinrichtung PI
+1. Website öffnen
+2. im Linken Menübereich unter `Connections` -> `Data sources` -> `Add new Connection`
+	Host URL: `mariadb:3306`
+	Database name: `python-mesurement`
+	Username: `root`
+3. dann im Linken Menü unter `Dashboard`
+	Query: `SELECT time, temperature, pressure FROM metric ORDER BY time DESC;`
+4. im Rechten Menü *Look-and-Feel* vom Graphen anpassen
 
-##### Hinzufügen von Wlan Netzwerken
-
-1. `sudo nmtui`
 
 ---
-
 ## Sonstiges
-Abgesehen von der in der Abgabe wurde sich mit weiteren Möglichkeiten von Datenbanken, grafischen Darstellungen, Automatisierungstools und Scripting Sprachen außeinandergesetzt.
-Bei den Sprachen python und Rust wurde sich des weiteren mit möglichen Dependencies zur Nutzung in dem Projekt auseinandergesetzt.
-
-### Automatisierungstools
-- n8n: zu mächtig für das Projekt, wenn bereits vorhanden kann es jedoch verwendet werden
-- nodeRED: vergleichbar mit n8n
-- cron: da der gesamte Softwarestack auf Docker aufbaut verworfen; 
-- docker image mit Dauerschleife im Programm/Skript: als Auswahl getroffen, da der übrige Softwarestack ebenfalls als Docker Container umgesetzt sind
-
-### Datenbank 
-- influxDB (TSDB): trotz spezialisierung auf eine hohes read/write aufkommen bei geringer Datengröße für den Raspi leider nicht geeignet, da die pagesize im Docker Image nicht mit dem Raspberry Pi übereinstimmt
-- sqlite: durch Grafana nicht unterstützt
-- mariaDB: durch grafana unterstützt
-
-### Darstellung
-- jypiter nodebook: eher für aktives arbeiten nutzbar nicht zur enddarstellung
-- grafana: mächtig Tool entwas überfordernt, aber geeignet
-- plotly: pythonbiobliothek die weitere Einbindung benötigt
-
-### Skriptsprache
-- python: durch Aufgabenstellung gefordert
-- rust: aktuellere dependencies, da nicht überprüfbar abgeleht vielleicht als "Zusatzleistung"
-
-
 ### Ausgabe von Git Log online vor der Bearbeitung der Dokumentation (Arbeitsschritte von neu nach alt)
 
 - 930ba28 update .gitignore to include rust build files
