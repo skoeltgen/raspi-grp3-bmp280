@@ -38,9 +38,9 @@ Bei den Sprachen *Python* und *Rust* wurde sich des weiteren mit möglichen *Dep
 #### Automatisierungstools
 
 - **n8n**:
-	- Zu mächtig für das Projekt, wenn bereits vorhanden kann es jedoch verwendet werden. Ehr für *Komplexe Automatisierungen* und eingebaute Unterstützung von KI-Agenten, welche hier unangebracht ist.
+	- Zu mächtig für das Projekt, wenn bereits vorhanden kann es jedoch verwendet werden. Eher für *Komplexe Automatisierungen* und eingebaute Unterstützung von KI-Agenten, welche hier unangebracht ist.
 - **nodeRED**:
-	- Teilweise vergleichbar mit *n8n, aber ohne die KI Einbindung und ehr für die visuelle Programmierung von Code.
+	- Teilweise vergleichbar mit *n8n*, aber ohne die KI Einbindung und ehr für die visuelle Programmierung von Code.
 - **cron**:
 	- Da der gesamte Softwarestack auf *Docker* aufbaut ist wurde diese Idee wieder verworfen. 
 - **Docker Image** mit *Dauerschleife im Programm/Skript*:
@@ -69,8 +69,12 @@ Bei den Sprachen *Python* und *Rust* wurde sich des weiteren mit möglichen *Dep
 
 ### Fazit
 
+Es gibt eingie Tools und Programme welche für des Projekt geeignet wären. Da die Zeit jedoch begrenzt ist und alleine mit ein einzigem Tool, wie z.B. *Plotly*, könnte man sich länger beschäftigen.
 
+Zudem war in unserer Gruppe bereits einiges an Vorwissen über Scripting und Datenbanken vorhanden, so dass wir uns länger mit dem Informieren über die verschiedenen Tools und das Docker Setup beschäftigt haben.
+Zudem geben die gesammelten Daten auch nur eine Gewissen Spielraum (aufgrunde von Menge und Anzahl).
 
+Daher haben wir uns für das *Docker Setup*, mit *Grafana* für die Oberfläche, MariaDB als Datenbank und Python Scripts für das Auslesen.
 
 ---
 
@@ -205,6 +209,7 @@ Sollte nach Docker start eigentlich im Browser erreichbar sein, sonst unter [Gra
 Für die Erstellung eines Simpelen Dashboards sind folgenede Schritte Nötig:
 
 1. Website öffnen
+	- `http://<IP>:3000`
 2. im Linken Menübereich unter `Connections` -> `Data sources` -> `Add new Connection`
 	Host URL: `mariadb:3306`
 	Database name: `python-mesurement`
