@@ -189,7 +189,13 @@ Bei den Sprachen python und Rust wurde sich des weiteren mit möglichen Dependen
 - mariaDB: durch grafana unterstützt
 
 ### Darstellung
-jypiter node
+- jypiter nodebook: eher für aktives arbeiten nutzbar nicht zur enddarstellung
+- grafana: mächtig Tool entwas überfordernt, aber geeignet
+- plotly: pythonbiobliothek die weitere Einbindung benötigt
+
+### Skriptsprache
+- python: durch Aufgabenstellung gefordert
+- rust: aktuellere dependencies, da nicht überprüfbar abgeleht vielleicht als "Zusatzleistung"
 
 
 ### Ausgabe von Git Log online vor der Bearbeitung der Dokumentation (Arbeitsschritte von neu nach alt)
