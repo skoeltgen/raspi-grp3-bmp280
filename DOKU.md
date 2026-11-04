@@ -9,6 +9,8 @@ lastEditDate: 2026-11-04
 
 # Doku
 
+Gruppe 3: Sven Költgen, Moritz Valkysers
+
 ## Festlegung Systemumgebung und Projektkontext
 
 - **OS**: PI OS Light 64 bit
